@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "340386238429",
+    "project_id": "tomotogame-26a63",
+    "storage_bucket": "tomotogame-26a63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340386238429:android:e5120d57d5a66310617034",
+        "android_client_info": {
+          "package_name": "com.example.tomotogame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM_EBmnXYhCfDc5tAPXm-eiWMGoM0viak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
