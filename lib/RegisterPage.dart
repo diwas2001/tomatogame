@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,22 +10,22 @@ import 'model/user_model.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Registration Page',
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        primaryColor: Colors.grey,
       ),
-      home: RegisterPage(),
+      home: const RegisterPage(),
     );
   }
 }
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -36,99 +35,102 @@ class _RegisterPageState extends State<RegisterPage> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey,
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
+        backgroundColor: Colors.blueGrey, // App Bar background color
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               TextFormField(
-          validator: (value) {
-            RegExp regex = new RegExp(r'^.{3,}$');
-            if (value!.isEmpty) {
-            return ("username cannot be Empty");
-          }
-           if (!regex.hasMatch(value)) {
-            return ("Enter Valid username(Min. 3 Character)");
-          }
-          return null;
-          },
+                validator: (value) {
+                  RegExp regex = RegExp(r'^.{3,}$');
+                  if (value!.isEmpty) {
+                    return ("Username cannot be empty");
+                  }
+                  if (!regex.hasMatch(value)) {
+                    return ("Enter a valid username (Min. 3 characters)");
+                  }
+                  return null;
+                },
                 controller: _nameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Name',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 12.0),
+              const SizedBox(height: 12.0),
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    RegExp regex = new RegExp(r'^.{3,}$');
-                    if (value!.isEmpty) {
-                      return ("username cannot be Empty");
-                    }
-                    if (!regex.hasMatch(value)) {
-                      return ("Enter Valid username(Min. 3 Character)");
-                    }
-                    return null;
-                  },
-                decoration: InputDecoration(
+                validator: (value) {
+                  RegExp regex = RegExp(r'^.{3,}$');
+                  if (value!.isEmpty) {
+                    return ("Email cannot be empty");
+                  }
+                  if (!regex.hasMatch(value)) {
+                    return ("Enter a valid email address");
+                  }
+                  return null;
+                },
+                decoration: const InputDecoration(
                   labelText: 'Email',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 12.0),
+              const SizedBox(height: 12.0),
               TextFormField(
-              validator: (value) {
-              RegExp regex = new RegExp(r'^.{3,}$');
-              if (value!.isEmpty) {
-              return ("username cannot be Empty");
-              }
-              if (!regex.hasMatch(value)) {
-              return ("Enter Valid username(Min. 3 Character)");
-              }
-              return null;
-              },
+                validator: (value) {
+                  RegExp regex = RegExp(r'^.{3,}$');
+                  if (value!.isEmpty) {
+                    return ("Password cannot be empty");
+                  }
+                  if (!regex.hasMatch(value)) {
+                    return ("Enter a valid password (Min. 3 characters)");
+                  }
+                  return null;
+                },
                 controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 12.0),
+              const SizedBox(height: 12.0),
               TextFormField(
                 validator: (value) {
-                  RegExp regex = new RegExp(r'^.{3,}$');
+                  RegExp regex = RegExp(r'^.{3,}$');
                   if (value!.isEmpty) {
-                    return ("username cannot be Empty");
+                    return ("Confirm Password cannot be empty");
                   }
                   if (!regex.hasMatch(value)) {
-                    return ("Enter Valid username(Min. 3 Character)");
+                    return ("Enter a valid password (Min. 3 characters)");
                   }
                   return null;
                 },
                 controller: _confirmPasswordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Confirm Password',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   // Validate input and process registration logic here
@@ -139,24 +141,26 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   if (password == confirmPassword) {
                     // Registration logic here
-                    Register(name, email, password);
-                    // You can add your authentication logic or API calls here
-                    //print('Registration successful: Name - $name, Email - $email, Password - $password');
+                    register(name, email, password);
                   } else {
                     // Passwords do not match
                     print('Passwords do not match');
                   }
-
                 },
-
-                child: Text('Register'),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, // Background color
-                  onPrimary: Colors.white, // Text color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
+                    primary: Colors.blue.withOpacity(0.5),
+                    elevation: 25,
+                    shadowColor: Colors.grey,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20))),
+                child: const Text('Register'),
+                // style: ElevatedButton.styleFrom(
+                //   primary: Colors.red, // Button background color
+                //   onPrimary: Colors.grey, // Text color
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(20),
+                //   ),
+                // ),
               ),
             ],
           ),
@@ -164,31 +168,28 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-  Future<void> Register(String name, String email,String password) async {
-    if (_formKey.currentState!.validate()) {
-      await _auth.createUserWithEmailAndPassword(email: email, password: password)
-       .then((value) => {
-         postDetailsToFirestore(),
-       }).catchError((e)
-       {
-         Fluttertoast.showToast(msg: e!.message);
-       });
 
+  Future<void> register(String name, String email, String password) async {
+    if (_formKey.currentState!.validate()) {
+      await _auth
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) => {
+                postDetailsToFirestore(),
+              })
+          .catchError((e) {
+        Fluttertoast.showToast(msg: e!.message);
+      });
     }
   }
-  postDetailsToFirestore()async {
-    //calling our firestore
-    //calling our user model
-    //sending these values
 
+  postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
     UserModel userModel = UserModel();
-    //writing all the values
     userModel.uid = user!.uid;
     userModel.name = _nameController.text;
-    userModel.email= _emailController.text;
+    userModel.email = _emailController.text;
     userModel.password = _passwordController.text;
 
     await firebaseFirestore
@@ -197,9 +198,7 @@ class _RegisterPageState extends State<RegisterPage> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
 
-    Navigator.pushAndRemoveUntil(
-    (context),
-    MaterialPageRoute(builder: (context) => LoginPage()),(route) => false);
-
+    Navigator.pushAndRemoveUntil((context),
+        MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }
 }

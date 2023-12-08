@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'LoginPage.dart';
 
+// Define the main game screen widget
 class GameHome extends StatefulWidget {
   const GameHome({Key? key}) : super(key: key);
 
@@ -14,7 +15,7 @@ class GameHome extends StatefulWidget {
 }
 
 class _GameHomeState extends State<GameHome> {
-  int score = 0;
+  int score = 0; // Initialize the score
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController answerController = TextEditingController();
 
@@ -24,14 +25,15 @@ class _GameHomeState extends State<GameHome> {
       appBar: AppBar(
         actions: [
           IconButton(
-              onPressed: () async {
-                // Function logout
-                await _logout(context);
-              },
-              icon: const Icon(
-                Icons.logout_outlined,
-                color: Colors.red,
-              ))
+            onPressed: () async {
+              // Function to logout when the logout button is pressed
+              await _logout(context);
+            },
+            icon: const Icon(
+              Icons.logout_outlined,
+              color: Colors.red,
+            ),
+          )
         ],
         elevation: 0,
         backgroundColor: Colors.blueGrey,
@@ -51,11 +53,13 @@ class _GameHomeState extends State<GameHome> {
                 fit: StackFit.loose,
                 clipBehavior: Clip.hardEdge,
                 children: [
+                  // Display the current score
                   Text(
                     "Score : $score",
                     style:
                         TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold),
                   ),
+                  // Display an image asset for the score
                   Image.asset(
                     'assets/score.png',
                     width: 200,
@@ -63,6 +67,7 @@ class _GameHomeState extends State<GameHome> {
                   ),
                 ],
               ),
+              // Use FutureBuilder to fetch and display game data from an API
               FutureBuilder<GameData>(
                 future: fetchGameDataFromAPI(),
                 builder: (context, snapshot) {
@@ -83,13 +88,16 @@ class _GameHomeState extends State<GameHome> {
                           fit: StackFit.passthrough,
                           clipBehavior: Clip.hardEdge,
                           children: [
+                            // Display an image frame
                             Image.asset(
                               'assets/frame.png',
                             ),
+                            // Display the question image fetched from the API
                             Image.network(
                               snapshot.data!.imageUrl,
                               width: 240,
                               errorBuilder: (context, error, stackTrace) {
+                                // Handle image loading errors
                                 return Column(
                                   children: [
                                     Text("Failed to load the image."),
@@ -104,14 +112,6 @@ class _GameHomeState extends State<GameHome> {
                       SizedBox(
                         height: 16,
                       ),
-                      /*Text(
-                        snapshot.data!.solution,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                      ),*/
-                      const SizedBox(
-                        height: 16,
-                      ),
                       // Text field for user's answer
                       TextFormField(
                         controller: answerController,
@@ -123,12 +123,19 @@ class _GameHomeState extends State<GameHome> {
                       const SizedBox(
                         height: 16,
                       ),
+                      // Button to check the user's answer
                       ElevatedButton(
                         onPressed: () {
                           // Check the user's answer
                           checkAnswer(snapshot.data!.solution);
                         },
                         child: const Text('Check Answer'),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.green.withOpacity(0.5),
+                            elevation: 25,
+                            shadowColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20))),
                       ),
                       Divider(),
                     ],
@@ -142,6 +149,7 @@ class _GameHomeState extends State<GameHome> {
     );
   }
 
+  // Function to handle user logout
   Future<void> _logout(BuildContext context) async {
     try {
       // Sign out the current user
@@ -159,6 +167,7 @@ class _GameHomeState extends State<GameHome> {
     }
   }
 
+  // Function to fetch game data from an API
   Future<GameData> fetchGameDataFromAPI() async {
     final response = await http.get(
       Uri.parse('https://marcconrad.com/uob/tomato/api.php?out=json'),
@@ -169,10 +178,12 @@ class _GameHomeState extends State<GameHome> {
       print(gameData.solution);
       return gameData;
     } else {
+      // Throw an exception if data loading fails
       throw Exception('Failed to load data from the API');
     }
   }
 
+  // Function to create GameData object from API response
   GameData createGameData(Map<String, dynamic> data) {
     String imageUrl = data["question"];
     String solution = data["solution"].toString();
@@ -182,39 +193,44 @@ class _GameHomeState extends State<GameHome> {
     );
   }
 
+  // Function to check the user's answer
   void checkAnswer(String correctAnswer) {
     String userAnswer = answerController.text.trim();
     if (userAnswer.toLowerCase() == correctAnswer.toLowerCase()) {
       // User's answer is correct
       Fluttertoast.showToast(
-          msg: "Correct Answer",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+        msg: "Correct Answer",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       print('Correct Answer!');
       setState(() {
         score++;
+        // Fetch new game data after correct answer
         fetchGameDataFromAPI();
         answerController.clear();
       });
     } else {
       // User's answer is incorrect
       Fluttertoast.showToast(
-          msg: "Incorrect Answer",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0);
+        msg: "Incorrect Answer",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
       print('Incorrect Answer!');
     }
   }
 }
 
+// Class to represent game data (question image URL and correct answer)
 class GameData {
   final String imageUrl;
   final String solution;
