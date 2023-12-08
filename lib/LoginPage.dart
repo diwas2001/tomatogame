@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'GameHome.dart';
 import 'RegisterPage.dart';
 
+/// A stateful widget representing the login page.
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -10,6 +11,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+/// The private state class for the LoginPage widget.
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -126,13 +128,6 @@ class _LoginPageState extends State<LoginPage> {
                         shadowColor: Colors.grey,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20))),
-                    // style: ElevatedButton.styleFrom(
-                    //   primary: Colors.red, // Button background color
-                    //   onPrimary: Colors.grey, // Text color
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(20),
-                    //   ),
-                    // ),
                   ),
                 ],
               ),
@@ -143,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // Function to handle the sign-in process
+  /// Function to handle the sign-in process
   Future signIn() async {
     if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
       try {

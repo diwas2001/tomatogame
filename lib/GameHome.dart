@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'LoginPage.dart';
 
-// Define the main game screen widget
+/// Widget representing the main game screen.
 class GameHome extends StatefulWidget {
   const GameHome({Key? key}) : super(key: key);
 
@@ -14,6 +14,7 @@ class GameHome extends StatefulWidget {
   State<GameHome> createState() => _GameHomeState();
 }
 
+/// Private state class for the GameHome widget.
 class _GameHomeState extends State<GameHome> {
   int score = 0; // Initialize the score
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -149,7 +150,7 @@ class _GameHomeState extends State<GameHome> {
     );
   }
 
-  // Function to handle user logout
+  /// Function to handle user logout
   Future<void> _logout(BuildContext context) async {
     try {
       // Sign out the current user
@@ -167,7 +168,7 @@ class _GameHomeState extends State<GameHome> {
     }
   }
 
-  // Function to fetch game data from an API
+  /// Function to fetch game data from an API
   Future<GameData> fetchGameDataFromAPI() async {
     final response = await http.get(
       Uri.parse('https://marcconrad.com/uob/tomato/api.php?out=json'),
@@ -183,7 +184,7 @@ class _GameHomeState extends State<GameHome> {
     }
   }
 
-  // Function to create GameData object from API response
+  /// Function to create GameData object from API response
   GameData createGameData(Map<String, dynamic> data) {
     String imageUrl = data["question"];
     String solution = data["solution"].toString();
@@ -193,7 +194,7 @@ class _GameHomeState extends State<GameHome> {
     );
   }
 
-  // Function to check the user's answer
+  /// Function to check the user's answer
   void checkAnswer(String correctAnswer) {
     String userAnswer = answerController.text.trim();
     if (userAnswer.toLowerCase() == correctAnswer.toLowerCase()) {
@@ -230,7 +231,7 @@ class _GameHomeState extends State<GameHome> {
   }
 }
 
-// Class to represent game data (question image URL and correct answer)
+/// Class to represent game data (question image URL and correct answer)
 class GameData {
   final String imageUrl;
   final String solution;

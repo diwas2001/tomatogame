@@ -7,8 +7,10 @@ import 'package:tomotogame/LoginPage.dart';
 
 import 'model/user_model.dart';
 
+/// Entry point of the application.
 void main() => runApp(const MyApp());
 
+/// The main application widget for the registration page.
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -24,6 +26,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// Widget representing the registration page.
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
@@ -31,6 +34,7 @@ class RegisterPage extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
 }
 
+/// State class for the RegisterPage widget.
 class _RegisterPageState extends State<RegisterPage> {
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
@@ -154,13 +158,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20))),
                 child: const Text('Register'),
-                // style: ElevatedButton.styleFrom(
-                //   primary: Colors.red, // Button background color
-                //   onPrimary: Colors.grey, // Text color
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(20),
-                //   ),
-                // ),
               ),
             ],
           ),
@@ -169,6 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  /// Function to handle user registration.
   Future<void> register(String name, String email, String password) async {
     if (_formKey.currentState!.validate()) {
       await _auth
@@ -182,6 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  /// Function to post user details to Firestore after successful registration.
   postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
